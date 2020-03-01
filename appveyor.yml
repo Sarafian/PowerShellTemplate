@@ -5,8 +5,11 @@ init:
 install:
 - pwsh: >-
     Install-Module -Name XWrite -Scope CurrentUser -Force
+    
     Set-XGlobalTrace -ForVerbose
+    
     Enable-XWriteProgress -UseHost -ForegroundColor Green
+    
     Enable-XWrite -ForVerbose
 build: off
 test_script:
