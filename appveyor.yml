@@ -1,5 +1,9 @@
 version: 1.0.{build}
 image: Ubuntu1804
+init:
+- pwsh: '& ./CI/AppVeyor/Init-Script.ps1'
+install:
+- pwsh: '& ./CI/AppVeyor/Install-Script.ps1'
 build: off
 test_script:
 - pwsh: '& .\CI\Test-Module.ps1 -EnableExit -PassThru'
