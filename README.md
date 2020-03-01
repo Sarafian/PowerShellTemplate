@@ -15,4 +15,5 @@ This is a template repository for PowerShell modules and scripts. Template conta
 - AppVeyor yaml file
 - Azure DEVOPS yaml file
 - Same for scripts
-- Renable `InModuleScope` tests pending issue [With InModuleScope, cmdlets or modules loaded before InModuleScope throw CommandNotFoundException upon access within InModuleScope](https://github.com/pester/Pester/issues/1461)
+- Re-enable `InModuleScope` tests pending issue [With InModuleScope, cmdlets or modules loaded before InModuleScope throw CommandNotFoundException upon access within InModuleScope](https://github.com/pester/Pester/issues/1461)
+- VSCode build actions
