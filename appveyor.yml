@@ -4,7 +4,7 @@ init:
 - pwsh: Get-ChildItem ENV:\
 build: off
 test_script:
-- pwsh: '& .\CI\Test-Module.ps1 -AppVeyor'
+- pwsh: '& .\CI\Invoke-Test.ps1 -AppVeyor'
 deploy_script:
 - pwsh: >-
     & .\CI\Publish-Module.ps1

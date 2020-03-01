@@ -10,7 +10,7 @@ $dependsOnPrivateCmdlets|ForEach-Object {
     . "$here\..\Private\$_.ps1"
 }
 
-Describe "Get-M1" {
+Describe  -Tag @("M1","Cmdlet","Public") "Get-M1" {
     It "Just invoke" {
         Get-M1|Should -BeExactly "M1"
     }

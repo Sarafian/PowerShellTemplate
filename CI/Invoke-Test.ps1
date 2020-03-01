@@ -9,10 +9,7 @@ param(
 
 $pesterScript=@(
     @{
-        Path="$PSScriptRoot\..\Src\Modules"
-    }
-    @{
-        Path="$PSScriptRoot\..\Src\Tests\Modules"
+        Path="$PSScriptRoot\..\Src"
     }
 )
 
@@ -23,7 +20,7 @@ switch($PSCmdlet.ParameterSetName) {
         if ($res.FailedCount -gt 0) { throw "$($res.FailedCount) tests failed."}
     }
     'Console' {
-        Invoke-Pester -Script $pesterScript @PSBoundParameters
+        Invoke-Pester -Script $pesterScript @PSBoundParameters -ExcludeTag "GH-1461"
     }
 }
 
