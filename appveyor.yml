@@ -15,8 +15,10 @@ build: off
 test_script:
 - pwsh: '& .\CI\Test-Module.ps1 -AppVeyor'
 artifacts:
-- path: Src\Modules\M1\**
-  name: M1
+- path: Mock\Repository\**
+  name: Mock
+- path: Src\Modules\M2\**
+  name: M2
 - path: Src\Modules\M2\**
   name: M2
 deploy_script:
