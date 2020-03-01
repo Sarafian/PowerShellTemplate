@@ -13,24 +13,14 @@ install:
     Enable-XWrite -ForVerbose
 build: off
 test_script:
-- pwsh: '& .\CI\Test-Module.ps1 -EnableExit -PassThru'
+- pwsh: '& .\CI\Test-Module.ps1 -AppVeyor'
 artifacts:
 - path: Src\Modules\M1\**
   name: M1
 - path: Src\Modules\M2\**
   name: M2
+deploy_script:
+- pwsh: >-
+    & .\Mock\Register-MockRepository.ps1
 
-for:
--
-  branches:
-    only:
-      - master
-  deploy_script:
-  - pwsh: >-
-      & .\CI\Publish-Module.ps1
--
-  deploy_script:
-  - pwsh: >-
-      & .\Mock\Register-MockRepository.ps1
-
-      & .\CI\Publish-Module.ps1 -UseMock -KeepManifests
+    & .\CI\Publish-Module.ps1 -UseMock -KeepManifests
