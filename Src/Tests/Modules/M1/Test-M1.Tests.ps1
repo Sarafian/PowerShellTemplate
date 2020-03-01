@@ -12,6 +12,9 @@ Describe "InModuleScope M1" {
     }
 }
 
+<#
+# Disabled until resolution of https://github.com/pester/Pester/issues/1461
+
 Describe "InModuleScope M1 Mock private" {
     InModuleScope M1 {
         $mockedValue=Get-RandomValue -String
@@ -26,6 +29,8 @@ Describe "InModuleScope M1 Mock private" {
         }
     }
 }
+
+#>
 
 
 Describe "M1" {
