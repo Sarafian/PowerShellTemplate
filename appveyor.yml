@@ -1,7 +1,7 @@
 version: 1.0.{build}
 image: Ubuntu1804
 init:
-- pwsh: '& ./CI/AppVeyor/Init-Script.ps1'
+- pwsh: '& .\CI\AppVeyor\Init-Script.ps1'
 install:
 - pwsh: '& ./CI/AppVeyor/Install-Script.ps1'
 build: off
