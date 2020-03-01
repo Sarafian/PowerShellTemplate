@@ -24,7 +24,7 @@ $RECYCLE.BIN/
 **/*.nuspec
 
 # Mock
-Mock/Repository/**
+Mock/Repository/*.nupkg
 Mock/Invoke-Debug.ps1
 
 # AppVeyor
