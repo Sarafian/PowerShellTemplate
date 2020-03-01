@@ -1,0 +1,1 @@
+Import-Module "$PSScriptRoot\Modules\Helper\Helper.psm1" -Force -Global

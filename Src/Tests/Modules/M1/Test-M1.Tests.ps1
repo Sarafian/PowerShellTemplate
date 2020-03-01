@@ -1,5 +1,5 @@
 & $PSScriptRoot\..\..\..\Modules\Import-M1.ps1
-. $PSScriptRoot\..\..\Cmdlets-Helpers\Get-RandomValue.ps1
+& $PSScriptRoot\..\..\Helpers\Import-Helper.ps1
 
 Describe "InModuleScope M1" {
     InModuleScope M1 {
