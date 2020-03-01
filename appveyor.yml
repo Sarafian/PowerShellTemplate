@@ -16,6 +16,8 @@ artifacts:
   name: M1
 - path: Src\Modules\M2\**
   name: M2
+
+for:
 -
   branches:
     only:
