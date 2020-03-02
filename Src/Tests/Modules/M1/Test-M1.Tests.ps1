@@ -1,7 +1,7 @@
 & $PSScriptRoot\..\..\..\Modules\Import-M1.ps1
 . $PSScriptRoot\..\..\Cmdlets-Helpers\Get-RandomValue.ps1
 
-Describe "InModuleScope M1" {
+Describe -Tag @("M1","Module","InModuleScope") "InModuleScope M1" {
     InModuleScope M1 {
         It "Get-M1Private" {
             Get-M1Private| Should -BeExactly "M1 Private"
@@ -12,7 +12,10 @@ Describe "InModuleScope M1" {
     }
 }
 
-Describe "InModuleScope M1 Mock private" {
+#<#
+# Disabled until resolution of https://github.com/pester/Pester/issues/1461
+
+Describe -Tag @("M1","Module","InModuleScope","MockPrivate","GH-1461") "InModuleScope M1 Mock private" {
     InModuleScope M1 {
         $mockedValue=Get-RandomValue -String
         Mock Get-M1Private {
@@ -27,8 +30,10 @@ Describe "InModuleScope M1 Mock private" {
     }
 }
 
+#>
 
-Describe "M1" {
+
+Describe -Tag @("M1","Module") "M1" {
     It "Get-M1Private throws" {
         {Get-M1Private} | Should -Throw
     }
