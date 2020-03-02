@@ -6,7 +6,7 @@ install:
 - pwsh: # Install-Module -Name Pester -Scope CurrentUser -Force  
 build: off
 test_script:
-- pwsh: '& .\CI\Invoke-Test.ps1 -AppVeyor'
+- pwsh: '& .\CI\Invoke-Test.ps1 -AppVeyor -CodeCoverage'
 deploy_script:
 - pwsh: >-
     & .\CI\Publish-Module.ps1
