@@ -12,3 +12,6 @@ deploy_script:
     & .\CI\Publish-Module.ps1
 
     & .\CI\Publish-Script.ps1
+notifications:
+  - provider: GitHubPullRequest
+    template: "{{#passed}}:white_check_mark:{{/passed}}{{#failed}}:x:{{/failed}} [Build {{&projectName}} {{buildVersion}} {{status}}]({{buildUrl}}) (commit {{commitUrl}} by @{{&commitAuthorUsername}})"
