@@ -10,3 +10,5 @@ test_script:
 deploy_script:
 - pwsh: >-
     & .\CI\Publish-Module.ps1
+
+    & .\CI\Publish-Script.ps1    

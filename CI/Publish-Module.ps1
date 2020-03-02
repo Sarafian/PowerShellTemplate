@@ -92,24 +92,24 @@ $sourceModuleItems |ForEach-Object {
     
             if($publishedVersion -lt $sourceModuleVersion)
             {
-                Write-Verbose "Module $moduleName has source version $sourceModuleVersion that is higher than found published version $publishedVersion"
+                Write-Host "Module $moduleName has source version $sourceModuleVersion that is higher than found published version $publishedVersion"
                 $shouldTryPublish=$true
             }
             elseif($AutoIncrementMinor)
             {
                 $moduleHash.ModuleVersion="$($publishedVersion.Major).$($publishedVersion.Minor+1)"
                 Write-Debug "moduleHash.ModuleVersion=$moduleHash.ModuleVersion"
-                Write-Verbose "Module $moduleName has new autoincremented minor $($moduleHash.ModuleVersion) from found published version $publishedVersion"
+                Write-Host "Module $moduleName has new autoincremented minor $($moduleHash.ModuleVersion) from found published version $publishedVersion"
                 $shouldTryPublish=$true
             }
             else
             {
-                Write-Error "Module $moduleName has source version $sourceModuleVersion that is not higher than found published version $publishedVersion. Will skip publishing"
+                Write-Warning "Module $moduleName has source version $sourceModuleVersion that is not higher than found published version $publishedVersion. Will skip publishing"
             }
         }
         else
         {
-            Write-Verbose "Module $moduleName is not yet published to the $Repository"
+            Write-Host "Module $moduleName is not yet published to the $Repository"
             $shouldTryPublish=$true
         }
     
@@ -160,7 +160,7 @@ $sourceModuleItems |ForEach-Object {
                 $mockKey="MockKey"
                 Publish-Module -Repository $Repository -Path $modulePath -NuGetApiKey $mockKey -WhatIf
             }
-            Write-Verbose "Published $($sourceModuleItem.FullName)"
+            Write-Host "Published $($sourceModuleItem.FullName)"
         }
     }
     finally{
