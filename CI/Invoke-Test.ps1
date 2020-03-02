@@ -45,10 +45,12 @@ if($CodeCoverage)
         Expression={$_.CodeCoverage.NumberOfCommandsMissed}
     }
 }
+Write-Host "outputFile=$outputFile"
+Get-Content -Path $outputFile
 
 switch($PSCmdlet.ParameterSetName) {
     'AppVeyor' {
-        (New-Object 'System.Net.WebClient').UploadFile("https://ci.appveyor.com/api/testresults/nunit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path -Path $outputFile))
+        (New-Object 'System.Net.WebClient').UploadFile("https://ci.appveyor.com/api/testresults/nunit/$($env:APPVEYOR_JOB_ID)", $outputFile)
     }
     'Console' {
 
