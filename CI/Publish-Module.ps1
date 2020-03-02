@@ -15,6 +15,7 @@ param(
     [switch]$KeepManifests=$false
 )
 
+#region To be removed. Supporting mock publishing functionality
 if($PSCmdlet.ParameterSetName.StartsWith("MOCK"))
 {
     if(-not $WhatIf)
@@ -22,7 +23,10 @@ if($PSCmdlet.ParameterSetName.StartsWith("MOCK"))
         $NuGetApiKey="anything"
     }
     $Repository=& $PSScriptRoot\..\Mock\Get-MockRepositoryInfo.ps1 -OnlyName
+    & $PSScriptRoot\Publish-Module -NuGetApiKey $NuGetApiKey -Repository $Repository -AutoIncrementMinor:$AutoIncrementMinor
+    return 
 }
+#endregion
 
 if (-not ("Semver.SemVersion" -as [type]))
 {
