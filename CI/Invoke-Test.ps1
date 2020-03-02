@@ -6,6 +6,9 @@ param(
     [string[]]$Tag=$null,
     [Parameter(Mandatory=$false,ParameterSetName="AppVeyor")]
     [Parameter(Mandatory=$false,ParameterSetName="Console")]
+    [string[]]$ExcludeTag=$null,
+    [Parameter(Mandatory=$false,ParameterSetName="AppVeyor")]
+    [Parameter(Mandatory=$false,ParameterSetName="Console")]
     [switch]$CodeCoverage=$false
 )
 $srcPath=Resolve-Path -Path "$PSScriptRoot\..\Src"
@@ -15,8 +18,8 @@ $splat=@{
     PassThru=$true
     OutputFormat="NUnitXml"
     OutputFile=$outputFile
-    PesterOption=New-PesterOption -TestSuiteName "$($_ -join ",") tags tests summary"
-#    ExcludeTag="GH-1461"
+#    PesterOption=New-PesterOption -TestSuiteName "$($_ -join ",") tags tests summary"
+    ExcludeTag=$ExcludeTag
     Tag=$Tag
 }
 if($CodeCoverage)
@@ -45,9 +48,8 @@ if($CodeCoverage)
         Expression={$_.CodeCoverage.NumberOfCommandsMissed}
     }
 }
-Write-Host "outputFile=$outputFile"
-Get-Content -Path $outputFile
 
+$PSCmdlet.ParameterSetName
 switch($PSCmdlet.ParameterSetName) {
     'AppVeyor' {
         (New-Object 'System.Net.WebClient').UploadFile("https://ci.appveyor.com/api/testresults/nunit/$($env:APPVEYOR_JOB_ID)", $outputFile)
