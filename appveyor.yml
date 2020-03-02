@@ -9,6 +9,8 @@ test_script:
 - pwsh: '& .\CI\Invoke-Test.ps1 -AppVeyor -ExcludeTag GH-1461'
 deploy_script:
 - pwsh: >-
-    & .\CI\Publish-Module.ps1
+    & .\Mock\Register-MockRepository.ps1
+    
+    & .\CI\Publish-Module.ps1 -UseMock
 
-    & .\CI\Publish-Script.ps1    
+    & .\CI\Publish-Script.ps1 -UseMock    
