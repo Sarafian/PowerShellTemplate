@@ -18,7 +18,6 @@ $splat=@{
     PassThru=$true
     OutputFormat="NUnitXml"
     OutputFile=$outputFile
-    PesterOption=New-PesterOption -TestSuiteName "$($_ -join ",") tags tests summary"
     ExcludeTag=$ExcludeTag
     Tag=$Tag
 }
