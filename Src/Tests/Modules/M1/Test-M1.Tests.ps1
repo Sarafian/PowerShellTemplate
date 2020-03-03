@@ -41,3 +41,5 @@ Describe -Tag @("M1","Module") "M1" {
         Get-M1| Should -BeExactly "M1"
     }
 }
+
+Remove-Module -Name M1 -Force
