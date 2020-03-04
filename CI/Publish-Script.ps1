@@ -1,3 +1,5 @@
+#Requires -Modules @{ ModuleName="SemVerPS"; ModuleVersion="1.0" }
+
 param(
     [Parameter(Mandatory=$false,ParameterSetName="Template")]
     [string]$NuGetApiKey=$null,
@@ -21,12 +23,6 @@ if($PSCmdlet.ParameterSetName.StartsWith("MOCK"))
     return 
 }
 #endregion
-
-if (-not ("Semver.SemVersion" -as [type]))
-{
-    Write-verbose "Adding Semver.SemVersion type"
-    Add-Type -Path "$PSScriptRoot\CS\SemVersion.cs"
-}
 
 $sourceScriptItems=Get-ChildItem -Path "$PSScriptRoot\..\Src\Scripts" -File -Recurse
 
@@ -74,8 +70,8 @@ $sourceScriptItems |ForEach-Object {
             # Implicitly check the version of powershell and PowerShellGet script
             if($publishedVersion -is [string])
             {
-                $publishedVersion=[Semver.SemVersion]::Parse($publishedVersion)
-                $sourceScriptVersion=[Semver.SemVersion]::new($sourceMajor,$sourceMinor,0,$null,$null)
+                $publishedVersion=ConvertTo-SemVer -Version $publishedVersion
+                $sourceScriptVersion=ConvertTo-SemVer -Version "$sourceMajor,$sourceMinor"
             }
             else {
                 $sourceScriptVersion=[System.Version]::Parse($scriptHash.ScriptVersion)
