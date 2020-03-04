@@ -11,7 +11,7 @@ install:
     
     $modules|ForEach-Object {Install-Module -Name $_ -Scope CurrentUser -Force}
 
-    Get-Module -Name $modules -ListAvailable
+    Get-Module -Name $modules -ListAvailable|Format-Table Name,Version,Path
 build: off
 test_script:
 - pwsh: '& .\CI\Invoke-Test.ps1 -AppVeyor -ExcludeTag GH-1461'
