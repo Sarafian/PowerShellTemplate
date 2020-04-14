@@ -1,5 +1,8 @@
 & $PSScriptRoot\..\..\..\Modules\Import-M1.ps1
+# Dot sourcing
 . $PSScriptRoot\..\..\Cmdlets-Helpers\Get-RandomValue.ps1
+# Using Helper module
+#& $PSScriptRoot\..\..\Helpers\Import-Helper.ps1
 
 Describe -Tag @("M1","Module","InModuleScope") "InModuleScope M1" {
     InModuleScope M1 {
@@ -11,9 +14,6 @@ Describe -Tag @("M1","Module","InModuleScope") "InModuleScope M1" {
         }
     }
 }
-
-#<#
-# Disabled until resolution of https://github.com/pester/Pester/issues/1461
 
 Describe -Tag @("M1","Module","InModuleScope","MockPrivate") "InModuleScope M1 Mock private" {
     InModuleScope M1 {
@@ -29,9 +29,6 @@ Describe -Tag @("M1","Module","InModuleScope","MockPrivate") "InModuleScope M1 M
         }
     }
 }
-
-#>
-
 
 Describe -Tag @("M1","Module") "M1" {
     It "Get-M1Private throws" {
