@@ -15,7 +15,7 @@ Describe -Tag @("M1","Module","InModuleScope") "InModuleScope M2" {
 #<#
 # Disabled until resolution of https://github.com/pester/Pester/issues/1461
 
-Describe -Tag @("M2","Module","InModuleScope","MockPrivate","GH-1461") "InModuleScope M2 Mock private" {
+Describe -Tag @("M2","Module","InModuleScope","MockPrivate") "InModuleScope M2 Mock private" {
     InModuleScope M2 {
         $mockedValue=Get-RandomValue -String
         Mock Get-M2Private {

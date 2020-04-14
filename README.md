@@ -37,7 +37,7 @@ install:
 - pwsh: # Install-Module -Name Pester -Scope CurrentUser -Force  
 build: off
 test_script:
-- pwsh: '& .\CI\Invoke-Test.ps1 -AppVeyor -ExcludeTag GH-1461'
+- pwsh: '& .\CI\Invoke-Test.ps1 -AppVeyor'
 for:
 -
   branches:
@@ -58,7 +58,6 @@ for:
 
 - Publishing with semantic versioning for AutoIncrement
 - Azure DEVOPS yaml file
-- Re-enable `InModuleScope` tests pending issue [With InModuleScope, cmdlets or modules loaded before InModuleScope throw CommandNotFoundException upon access within InModuleScope]
 - VSCode build actions
 
 [Pester]: https://github.com/pester/Pester
