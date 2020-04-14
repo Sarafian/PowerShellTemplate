@@ -1,4 +1,4 @@
-function global:Get-RandomValue
+function Get-RandomValue
 {
     param(
         [Parameter(Mandatory = $true, ParameterSetName = "String")]

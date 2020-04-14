@@ -20,7 +20,11 @@ There are two main folders within the `src` directory
 
 Each module has a `Public` and `Private` sub folder that contain the exported and not functions of the module respectively. The publish engine will figure out the public functions and include them in the manifest. Each cmdlet can be paired with a `.Tests.ps1` file that contains the tests for [Pester].
 
-In a similar fashion, there is the `Tests` folder that contains the module and script tests. Helper function is provided and until the issue [With InModuleScope, cmdlets or modules loaded before InModuleScope throw CommandNotFoundException upon access within InModuleScope] is resolved contains the same helper function `Get-RandomValue` both as an independent function and as a function that is contained in a module.
+In a similar fashion, there is the `Tests` folder that contains the module and script tests. The helper function `Get-RandomValue` is provided in two forms.
+1. As an independent script to import with dot sourcing e.g. in [Test-M1.Tests.ps1](Src/Tests/Modules/M1/Test-M1.Tests.ps1) with `. $PSScriptRoot\..\..\Cmdlets-Helpers\Get-RandomValue.ps1`.
+1. As a cmdlet within the `Helper` module to be used in e.g.  [Test-M1.Tests.ps1](Src/Tests/Modules/M1/Test-M1.Tests.ps1) with `& $PSScriptRoot\..\..\Helpers\Import-Helper.ps1` instead of `. $PSScriptRoot\..\..\Cmdlets-Helpers\Get-RandomValue.ps1`.
+
+Notice that the implementation of the independent function to dot source [Test-M1.Tests.ps1](Src/Tests/Modules/M1/Test-M1.Tests.ps1) is declaring the function with `global` until the raised issue [With InModuleScope, cmdlets or modules loaded before InModuleScope throw CommandNotFoundException upon access within InModuleScope] is resolved.
 
 The `CI` folder contains scripts to run tests and publish modules. For the purpose of this repository, there is a `Mock` folder as well that allows publishing to a local file based PowerShell repository. This mocked concept should not be copied elsewhere and the related functionality should be removed by the mock scripts. When the publish scripts are invoked without a `NuGetAPIKey` then the flow will execute as normal and if the flow would new to publish a module or a script it will invoke `Publish-Module` and `Publish-Script` with the `-WhatIf` parameter.
 
@@ -37,7 +41,7 @@ install:
 - pwsh: # Install-Module -Name Pester -Scope CurrentUser -Force  
 build: off
 test_script:
-- pwsh: '& .\CI\Invoke-Test.ps1 -AppVeyor -ExcludeTag GH-1461'
+- pwsh: '& .\CI\Invoke-Test.ps1 -AppVeyor'
 for:
 -
   branches:
@@ -58,7 +62,6 @@ for:
 
 - Publishing with semantic versioning for AutoIncrement
 - Azure DEVOPS yaml file
-- Re-enable `InModuleScope` tests pending issue [With InModuleScope, cmdlets or modules loaded before InModuleScope throw CommandNotFoundException upon access within InModuleScope]
 - VSCode build actions
 
 [Pester]: https://github.com/pester/Pester
