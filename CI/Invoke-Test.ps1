@@ -26,6 +26,9 @@ $pesterConfiguration.TestResult.Enabled=$true
 $pesterConfiguration.TestResult.OutputFormat="NUnitXml"
 $pesterConfiguration.TestResult.OutputPath=$outputFile
 
+$pesterConfiguration.Output.Verbosity="Detailed"
+#$pesterConfiguration.Output.Verbosity="Diagnostic"
+
 if($CodeCoverage)
 {
     $pesterConfiguration.CodeCoverage.Enabled=$true
