@@ -14,7 +14,6 @@ Describe -Tag @("M2","Module","InModuleScope") "InModuleScope M2" {
     }
 }
 
-
 Describe -Tag @("M2","Module","InModuleScope","MockPrivate") "InModuleScope M2 Mock private" {
     BeforeEach {
         $mockedValue=Get-RandomValue -String
