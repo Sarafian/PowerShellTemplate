@@ -1,32 +1,38 @@
-& $PSScriptRoot\..\..\..\Modules\Import-M1.ps1
-# Dot sourcing
-. $PSScriptRoot\..\..\Cmdlets-Helpers\Get-RandomValue.ps1
-# Using Helper module
-#& $PSScriptRoot\..\..\Helpers\Import-Helper.ps1
+BeforeAll {
+    & $PSScriptRoot\..\..\..\Modules\Import-M1.ps1
+    . $PSScriptRoot\..\..\Cmdlets-Helpers\Get-RandomValue.ps1
+}
 
 Describe -Tag @("M1","Module","InModuleScope") "InModuleScope M1" {
-    InModuleScope M1 {
-        It "Get-M1Private" {
+    It "Get-M1Private" {
+        InModuleScope M1 {
             Get-M1Private| Should -BeExactly "M1 Private"
         }
-        It "Get-M1" {
-            Get-M1| Should -BeExactly "M1"
-        }
+    }
+    It "Get-M1" {
+        Get-M1| Should -BeExactly "M1"
     }
 }
 
 Describe -Tag @("M1","Module","InModuleScope","MockPrivate") "InModuleScope M1 Mock private" {
-    InModuleScope M1 {
+    BeforeEach {
         $mockedValue=Get-RandomValue -String
-        Mock Get-M1Private {
+        Mock -ModuleName M1 Get-M1Private {
             $mockedValue
         }
-        It "Get-M1Private Mocked" {
+        $inModuleScopeParameters = @{
+            mockedValue = $mockedValue
+        }
+
+    }
+    It "Get-M1Private Mocked" {
+        InModuleScope M1 -Parameters $inModuleScopeParameters {
+            param($mockedValue)
             Get-M1Private| Should -BeExactly $mockedValue
         }
-        It "Get-M1" {
-            Get-M1| Should -BeExactly $mockedValue
-        }
+    }
+    It "Get-M1" {
+        Get-M1| Should -BeExactly $mockedValue
     }
 }
 
@@ -38,5 +44,6 @@ Describe -Tag @("M1","Module") "M1" {
         Get-M1| Should -BeExactly "M1"
     }
 }
-
-Remove-Module -Name M1 -Force
+AfterAll {
+    Remove-Module -Name M1 -Force
+}

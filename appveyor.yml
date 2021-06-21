@@ -17,6 +17,12 @@ test_script:
 - pwsh: '& .\CI\Invoke-Test.ps1 -AppVeyor'
 deploy_script:
 - pwsh: >-
+    Get-Module -Name SemVerPS -ListAvailable|Format-Table Name,Version,Path
+
+    Import-Module SemVerPS -Force
+
+    Get-Module -Name SemVerPS|Format-Table Name,Version,Path
+
     & .\CI\Publish-Module.ps1
 
     & .\CI\Publish-Script.ps1

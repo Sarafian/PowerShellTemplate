@@ -1,6 +1,6 @@
-﻿$here = Split-Path -Parent $MyInvocation.MyCommand.Path
-$sut = (Split-Path -Leaf $MyInvocation.MyCommand.Path) -replace '\.Tests\.', '.'
-. "$here\$sut"
+﻿BeforeAll {
+    . $PSCommandPath.Replace('.Tests.ps1', '.ps1')
+}
 
 Describe -Tag @("M2","Cmdlet","Private") "Get-M2Private" {
     It "Just invoke" {
