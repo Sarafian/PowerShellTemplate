@@ -22,10 +22,16 @@ Describe -Tag @("M1","Module","InModuleScope","MockPrivate") "InModuleScope M1 M
         Mock -ModuleName M1 Get-M1Private {
             $mockedValue
         }
+        $inModuleScopeParameters = @{
+            mockedValue = $mockedValue
+        }
+
     }
     It "Get-M1Private Mocked" {
         Write-Host "IT-mockedValue=$mockedValue"
-        InModuleScope M1 {
+        Write-Host "IT-inModuleScopeParameters.MockedValue=$($inModuleScopeParameters.MockedValue)"
+        InModuleScope M1 -Parameters $inModuleScopeParameters {
+            param($mockedValue)
             Write-Host "InModuleScope-mockedValue=$mockedValue"
             Get-M1Private| Should -BeExactly $mockedValue
         }
