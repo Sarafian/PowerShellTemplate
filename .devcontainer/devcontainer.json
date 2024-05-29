@@ -1,12 +1,13 @@
 // Copied from https://github.com/devcontainers/templates/tree/main/src/powershell 480eb38c85438bd4e8e12debcdc82690326a1dff
-// Modified image to https://mcr.microsoft.com/en-us/product/powershell/test-deps/tags 
+// Execute the Init-DevContainer.ps1 as postCreateCommand.
 //
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the
 // README at: https://github.com/devcontainers/templates/tree/main/src/powershell
 {
-	"name": "PowerShell",
+	"name": "PowerShell-Pester",
 	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
-	"image": "mcr.microsoft.com/powershell/test-deps:lts-debian-11",
+	"image": "mcr.microsoft.com/powershell:lts-debian-11",
+
 	"features": {
 		"ghcr.io/devcontainers/features/common-utils:2": {
 			"installZsh": "true",
@@ -16,7 +17,7 @@
 		}
 	},
 
-	"postCreateCommand": "sudo chsh vscode -s \"$(which pwsh)\"",
+	"postCreateCommand": "sudo chsh vscode -s \"$(which pwsh)\";pwsh -File .devcontainer/Init-DevContainer.ps1",
 
 	// Configure tool-specific properties.
 	"customizations": {
