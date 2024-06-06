@@ -1,3 +1,11 @@
+<#PSScriptInfo
+
+.VERSION 1.0
+
+.LASTUPDATE 20240606
+
+#>
+
 param(
     [Parameter(Mandatory=$true,ParameterSetName="AppVeyor")]
     [switch]$AppVeyor,
