@@ -1,31 +1,35 @@
+<#PSScriptInfo
+
+.VERSION 1.0
+
+.LASTUPDATE 20240606
+
+#>
+
 #Requires -Modules @{ ModuleName="SemVerPS"; ModuleVersion="1.0" }
 
 param(
-    [Parameter(Mandatory=$false,ParameterSetName="Template")]
+    [Parameter(Mandatory=$false)]
     [string]$NuGetApiKey=$null,
-    [Parameter(Mandatory=$false,ParameterSetName="Template")]
+    [Parameter(Mandatory=$false)]
     [string]$Repository="PSGallery",
-    [Parameter(Mandatory=$false,ParameterSetName="Template")]
-    [Parameter(Mandatory=$false,ParameterSetName="MOCK:For internal testing")]
+    [Parameter(Mandatory=$false)]
     [switch]$AutoIncrementMinor=$false,
-    [Parameter(Mandatory=$true,ParameterSetName="MOCK:For internal testing")]
-    [switch]$UseMock,
-    [Parameter(Mandatory=$false,ParameterSetName="MOCK:For internal testing")]
-    [switch]$WhatIf=$false,
-    [Parameter(Mandatory=$false,ParameterSetName="Template")]
-    [Parameter(Mandatory=$false,ParameterSetName="MOCK:For internal testing")]
-    [switch]$KeepManifests=$false
+    [Parameter(Mandatory=$false)]
+    [switch]$Mock=$false,
+    [Parameter(Mandatory=$false)]
+    [switch]$WhatIf=$false
 )
 
-#region To be removed. Supporting mock publishing functionality
-if($PSCmdlet.ParameterSetName.StartsWith("MOCK"))
+#region To be removed when copying to other repository. Supporting mock publishing functionality
+if($Mock)
 {
     if(-not $WhatIf)
     {
         $NuGetApiKey="anything"
     }
     $Repository=& $PSScriptRoot\..\Mock\Get-MockRepositoryInfo.ps1 -OnlyName
-    & $PSScriptRoot\Publish-Module -NuGetApiKey $NuGetApiKey -Repository $Repository -AutoIncrementMinor:$AutoIncrementMinor
+    & $MyInvocation.MyCommand.Path -NuGetApiKey $NuGetApiKey -Repository $Repository -AutoIncrementMinor:$AutoIncrementMinor
     return 
 }
 #endregion
@@ -36,7 +40,7 @@ $sourceModuleItems |ForEach-Object {
     $sourceModuleItem=$_
 
     $moduleName=$sourceModuleItem.Name
-    $modulePath=$sourceModuleItem.FullName
+    $modulePath=Join-Path -Path ([System.IO.Path]::GetTempPath()) -ChildPath $sourceModuleItem.Name
     $psm1Path=Join-Path $modulePath "$moduleName.psm1"
     $psd1Path=Join-Path $modulePath "$moduleName.psd1"
 
@@ -45,7 +49,8 @@ $sourceModuleItems |ForEach-Object {
     Write-Debug "psm1Path=$psm1Path"
     Write-Debug "psd1Path=$psd1Path"
 
-    Remove-Item -Path $psd1Path -Force -ErrorAction SilentlyContinue
+    Remove-Item -Path $modulePath -Recurse -Force -ErrorAction SilentlyContinue
+    Copy-Item -Path $sourceModuleItem.FullName -Destination $modulePath -Recurse -Exclude "*.Tests.ps1"
 
     $progressSplat=@{
         Activity=$moduleName
@@ -126,16 +131,16 @@ $sourceModuleItems |ForEach-Object {
     
     <#
         $hash=@{
-            "Author"="SDL plc"
-            "CompanyName" = "SDL plc"
-            "Copyright"="SDL plc. All rights reserved."
+            "Author"=""
+            "CompanyName" = ""
+            "Copyright"=""
             "RootModule"=$psm1Name
             "Description"=$moduleDescription
             "Guid"=$guid
             "ModuleVersion"=$sourceVersion
             "Path"=$psd1Path
-            "LicenseUri"='https://stash.sdl.com/projects/SCTA/repos/core/browse'
-            "ProjectUri"= 'https://stash.sdl.com/projects/SCTA/repos/core/browse'
+            "LicenseUri"='https://github.com/Sarafian/PowerShellTemplate/blob/master/LICENSE'
+            "ProjectUri"= 'https://github.com/Sarafian/PowerShellTemplate/'
     #        "ReleaseNotes"= $releaseNotes -join [System.Environment]::NewLine
             "CmdletsToExport" = $exportedNames
             "FunctionsToExport" = $exportedNames
@@ -160,14 +165,10 @@ $sourceModuleItems |ForEach-Object {
                 $mockKey="MockKey"
                 Publish-Module -Repository $Repository -Path $modulePath -NuGetApiKey $mockKey -WhatIf
             }
-            Write-Host "Published $($sourceModuleItem.FullName)"
+            Write-Host "Published $modulePath"
         }
     }
     finally{
-        if(-not $KeepManifests)
-        {
-            Remove-Item -Path $psd1Path -Force -ErrorAction SilentlyContinue
-        }
         Write-Progress @progressSplat -Completed
     }
 }

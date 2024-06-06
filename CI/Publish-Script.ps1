@@ -1,25 +1,33 @@
+<#PSScriptInfo
+
+.VERSION 1.0
+
+.LASTUPDATE 20240606
+
+#>
+
 #Requires -Modules @{ ModuleName="SemVerPS"; ModuleVersion="1.0" }
 
 param(
-    [Parameter(Mandatory=$false,ParameterSetName="Template")]
+    [Parameter(Mandatory=$false)]
     [string]$NuGetApiKey=$null,
-    [Parameter(Mandatory=$false,ParameterSetName="Template")]
+    [Parameter(Mandatory=$false)]
     [string]$Repository="PSGallery",
-    [Parameter(Mandatory=$true,ParameterSetName="MOCK:For internal testing")]
-    [switch]$UseMock,
-    [Parameter(Mandatory=$false,ParameterSetName="MOCK:For internal testing")]
+    [Parameter(Mandatory=$false)]
+    [switch]$Mock=$false,
+    [Parameter(Mandatory=$false)]
     [switch]$WhatIf=$false
 )
 
-#region To be removed. Supporting mock publishing functionality
-if($PSCmdlet.ParameterSetName.StartsWith("MOCK"))
+#region To be removed when copying to other repository. Supporting mock publishing functionality
+if($Mock)
 {
     if(-not $WhatIf)
     {
         $NuGetApiKey="anything"
     }
     $Repository=& $PSScriptRoot\..\Mock\Get-MockRepositoryInfo.ps1 -OnlyName
-    & $PSScriptRoot\Publish-Script -NuGetApiKey $NuGetApiKey -Repository $Repository
+    & $MyInvocation.MyCommand.Path -NuGetApiKey $NuGetApiKey -Repository $Repository
     return 
 }
 #endregion
@@ -31,15 +39,9 @@ $sourceScriptItems |ForEach-Object {
 
     $scriptName=$sourceScriptItem.Name.Replace($sourceScriptItem.Extension,"")
     $scriptPath=$sourceScriptItem.FullName
-#    $psm1Path=Join-Path $scriptPath "$scriptName.psm1"
-#    $psd1Path=Join-Path $scriptPath "$scriptName.psd1"
 
     Write-Debug "scriptName=$scriptName"
     Write-Debug "scriptPath=$scriptPath"
-#    Write-Debug "psm1Path=$psm1Path"
-#    Write-Debug "psd1Path=$psd1Path"
-
-#    Remove-Item -Path $psd1Path -Force -ErrorAction SilentlyContinue
 
     $progressSplat=@{
         Activity=$scriptName
@@ -108,7 +110,7 @@ $sourceScriptItems |ForEach-Object {
                 $mockKey="MockKey"
                 Publish-Script -Repository $Repository -Path $scriptPath -NuGetApiKey $mockKey -WhatIf
             }
-            Write-Host "Published $($sourceScriptItem.FullName)"
+            Write-Host "Published $scriptPath"
         }
     }
     finally{
